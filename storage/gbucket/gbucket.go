@@ -241,6 +241,7 @@ func (db *GBucket) deleteV(k storage.Key) error {
 
 // put value from a given key or an error if nothing exists
 func (db *GBucket) putV(k storage.Key, value []byte) (err error) {
+	
 	for i := 0; i < NUM_TRIES; i++ {
 		// gets handle (no network op)
 		obj_handle := db.bucket.Object(hex.EncodeToString(k))
@@ -257,6 +258,8 @@ func (db *GBucket) putV(k storage.Key, value []byte) (err error) {
 		if err != nil || err2 != nil || numwrite != len(value) {
 			err = fmt.Errorf("Error writing object to google bucket")
 			time.Sleep(time.Duration(i+1) * time.Second)
+		} else {
+			break
 		}
 	}
 
