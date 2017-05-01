@@ -28,7 +28,7 @@ import (
 	"runtime"
 	"sort"
 	"sync"
-	"time"
+//	"time"
 
 	"github.com/janelia-flyem/dvid/dvid"
 	"github.com/janelia-flyem/dvid/storage"
@@ -242,28 +242,30 @@ func (db *GBucket) deleteV(k storage.Key) error {
 // put value from a given key or an error if nothing exists
 func (db *GBucket) putV(k storage.Key, value []byte) (err error) {
 	
-	for i := 0; i < NUM_TRIES; i++ {
-		// gets handle (no network op)
-		obj_handle := db.bucket.Object(hex.EncodeToString(k))
-
-		// returns error if it doesn't exist
-		obj := obj_handle.NewWriter(db.ctx)
-
-		// write data to buffer
-		numwrite, err2 := obj.Write(value)
-
-		// close will flush buffer
-		err = obj.Close()
-
-		if err != nil || err2 != nil || numwrite != len(value) {
-			err = fmt.Errorf("Error writing object to google bucket")
-			time.Sleep(time.Duration(i+1) * time.Second)
-		} else {
-			break
-		}
-	}
-
-	return err
+	return nil
+	
+//	for i := 0; i < NUM_TRIES; i++ {
+//		// gets handle (no network op)
+//		obj_handle := db.bucket.Object(hex.EncodeToString(k))
+//
+//		// returns error if it doesn't exist
+//		obj := obj_handle.NewWriter(db.ctx)
+//
+//		// write data to buffer
+//		numwrite, err2 := obj.Write(value)
+//
+//		// close will flush buffer
+//		err = obj.Close()
+//
+//		if err != nil || err2 != nil || numwrite != len(value) {
+//			err = fmt.Errorf("Error writing object to google bucket")
+//			time.Sleep(time.Duration(i+1) * time.Second)
+//		} else {
+//			break
+//		}
+//	}
+//
+//	return err
 }
 
 // getSingleVersionedKey returns value for latest version
