@@ -955,12 +955,14 @@ func (db *GBucket) putVhandle(obj_handle *api.ObjectHandle, value []byte) (err e
 
 		if err != nil && strings.Contains(err.Error(), "conditionNotMet") {
 			// failure to write due to generation id mismatch
+			fmt.Println("CONDITION NOT MET!")
 			return ErrCondFail
 		}
 
 		// other errors should cause a restart (is this handled properly in the api)
 		if err != nil || err2 != nil || numwrite != len(value) {
 			err = fmt.Errorf("Error writing object to google bucket")
+			fmt.Printf("Error writing object to google bucket ()%d. Retrying...\n", i)
 			time.Sleep(time.Duration(i+1) * time.Second)
 		} else {
 			break
