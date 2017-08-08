@@ -942,6 +942,9 @@ func (db *GBucket) putVTKey(ctx storage.Context, tk storage.TKey, value []byte) 
 
 // put value from a given handle or an error if nothing exists
 func (db *GBucket) putVhandle(obj_handle *api.ObjectHandle, value []byte) (err error) {
+
+	timedLog := dvid.NewTimeLog()
+
 	// gets handle (no network op)
 	for i := 0; i < NUM_TRIES; i++ {
 		// returns error if it doesn't exist
@@ -955,14 +958,14 @@ func (db *GBucket) putVhandle(obj_handle *api.ObjectHandle, value []byte) (err e
 
 		if err != nil && strings.Contains(err.Error(), "conditionNotMet") {
 			// failure to write due to generation id mismatch
-			fmt.Println("CONDITION NOT MET!")
+			timedLog.Errorf(err.Error())
 			return ErrCondFail
 		}
 
 		// other errors should cause a restart (is this handled properly in the api)
 		if err != nil || err2 != nil || numwrite != len(value) {
 			err = fmt.Errorf("Error writing object to google bucket")
-			fmt.Printf("Error writing object to google bucket ()%d. Retrying...\n", i)
+			timedLog.Errorf("Error writing object to google bucket (iteration %d). Retrying...\n", i)
 			time.Sleep(time.Duration(i+1) * time.Second)
 		} else {
 			break
