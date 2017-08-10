@@ -78,7 +78,7 @@ const (
 	MULTIBUCKET = 1.1
 
 	// value versioning
-	VALUEVERSION = 1.2
+	VALUEVERSION = 1.3
 
 	// Repo root bucket name
 	REPONAME = "-dvidrepo-"
