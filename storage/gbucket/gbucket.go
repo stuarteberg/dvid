@@ -2297,7 +2297,9 @@ func (db *goBuffer) DeleteRange(ctx storage.Context, TkBeg, TkEnd storage.TKey) 
 func (buffer *goBuffer) Flush() error {
 	retVals := make(chan error, len(buffer.ops))
 	// limits the number of simultaneous requests (should this be global)
-	workQueue := buffer.db.activeRequests
+	
+	//workQueue := buffer.db.activeRequests
+	workQueue := make(chan interface{}, 100) // Revert to old (non-shared) queue mechanism
 
 	for itnum, operation := range buffer.ops {
 		workQueue <- nil
