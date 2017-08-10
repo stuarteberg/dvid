@@ -948,13 +948,17 @@ func (db *GBucket) putVhandle(obj_handle *api.ObjectHandle, value []byte) (err e
 	// gets handle (no network op)
 	for i := 0; i < NUM_TRIES; i++ {
 		// returns error if it doesn't exist
+		timedLog.Errorf("obj := obj_handle.NewWriter(db.ctx)")
 		obj := obj_handle.NewWriter(db.ctx)
 
 		// write data to buffer
+		timedLog.Errorf("numwrite, err2 := obj.Write(value)")
 		numwrite, err2 := obj.Write(value)
 
 		// close will flush buffer
+		timedLog.Errorf("err = obj.Close()")
 		err = obj.Close()
+		timedLog.Errorf("Close complete.")
 
 		if err != nil && strings.Contains(err.Error(), "conditionNotMet") {
 			// failure to write due to generation id mismatch
