@@ -65,7 +65,7 @@ func init() {
 
 const (
 	// limit the number of parallel requests
-	MAXCONNECTIONS = 1000
+	MAXCONNECTIONS = 100
 
 	// init file for master gbucket
 	INITKEY = "initialized"
