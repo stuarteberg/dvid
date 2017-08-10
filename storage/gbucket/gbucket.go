@@ -867,6 +867,9 @@ func (db *GBucket) putV(ctx storage.Context, k storage.Key, value []byte) (err e
 	-1 op update basevalue (if a change exist for current keys)
 */
 func (db *GBucket) putVTKey(ctx storage.Context, tk storage.TKey, value []byte) error {
+
+	panic("Why is putVTKey called??")
+
 	// retrieve repo bucket
 	var bucket *api.BucketHandle
 	var err error
