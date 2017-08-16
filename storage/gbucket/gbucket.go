@@ -1742,7 +1742,7 @@ func (db *GBucket) LockKey(k storage.Key) error {
 
 		// wait some time and retry
 		time.Sleep(time.Duration(currdelay) * time.Second)
-		currdelay += 1
+		//currdelay += 1
 	}
 
 	return err
