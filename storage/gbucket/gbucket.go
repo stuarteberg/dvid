@@ -2350,9 +2350,11 @@ func (buffer *goBuffer) Flush() error {
 				err = fmt.Errorf("Incorrect buffer operation specified")
 			}
 
-			if currnum%MAXCONNECTIONS == (MAXCONNECTIONS - 1) {
-				runtime.GC()
-			}
+			runtime.GC()
+
+//			if currnum%MAXCONNECTIONS == (MAXCONNECTIONS - 1) {
+//				runtime.GC()
+//			}
 
 			// add errors to queue
 			retVals <- err
