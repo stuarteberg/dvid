@@ -41,10 +41,12 @@ jobs:
             cd ${DVID_SRC}
             make dvid
             make test
-#
-#workflows:
-#  version: 2
-#  setup_and_test:
-#    jobs:
-#      - checkout_and_install_deps
-#      - build_and_test
+
+workflows:
+  version: 2
+  setup_and_test:
+    jobs:
+      - checkout_and_install_deps
+      - build_and_test:
+          requires:
+            - checkout_and_install_deps
