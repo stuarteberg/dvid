@@ -5,7 +5,6 @@ jobs:
     docker:
       - image: condaforge/linux-anvil
         entrypoint: /opt/docker/bin/entrypoint
-        user: conda
         
     steps:
       - checkout:
@@ -45,7 +44,6 @@ jobs:
     docker:
       - image: condaforge/linux-anvil
         entrypoint: /opt/docker/bin/entrypoint
-        user: conda
     steps:
       - run:
           name: Build and test
