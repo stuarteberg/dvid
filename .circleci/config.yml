@@ -1,0 +1,50 @@
+version: 2
+
+jobs:
+  checkout_and_install_deps:
+    docker:
+      - image: condaforge/linux-anvil
+    steps:
+      - checkout:
+        path: /home/conda/gopath/src/github.com/janelia-flyem/dvid
+         
+      - restore_cache:
+          keys:
+            - conda-tree-{{ arch }}-{{ checksum "scripts/conda-recipe/meta.yaml" }}
+
+      - run:
+        environment:
+          GOPATH: /home/conda/gopath
+          DVID_SRC: /home/conda/gopath/src/github.com/janelia-flyem/dvid
+        command: |
+          conda config --add channels flyem-forge
+          conda create -n dvid-test || true
+          source activate dvid-test
+          cd ${DVID_SRC}
+          ./scripts/install-developer-dependencies.sh
+
+      - save_cache:
+          key: conda-tree-{{ arch }}-{{ checksum "scripts/conda-recipe/meta.yaml" }}
+          paths:
+            - /opt/conda
+
+  build_and_test:
+    docker:
+      - image: condaforge/linux-anvil
+    steps:
+      - run:
+        environment:
+          GOPATH: /home/conda/gopath
+          DVID_SRC: /home/conda/gopath/src/github.com/janelia-flyem/dvid
+        command: |
+          source activate dvid-test
+          cd ${DVID_SRC}
+          make dvid
+          make test
+
+workflows:
+  version: 2
+  setup_and_test:
+    jobs:
+      - checkout_and_install_deps
+      - build_and_test
