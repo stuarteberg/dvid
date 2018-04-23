@@ -19,12 +19,19 @@ jobs:
             DVID_SRC: /home/conda/gopath/src/github.com/janelia-flyem/dvid
           command: |
             ls -l /opt/docker/bin/
+            whoami
             source /opt/docker/bin/entrypoint_source
+            echo "Hi 1"
             conda config --add channels flyem-forge
+            echo "Hi 2"
             conda create -n dvid-test || true
+            echo "Hi 3"
             source activate dvid-test
+            echo "Hi 4"
             cd ${DVID_SRC}
+            echo "Hi 5"
             ./scripts/install-developer-dependencies.sh
+            echo "Hi 6"
 
       - save_cache:
           key: conda-tree-{{ arch }}-{{ checksum "/home/conda/gopath/src/github.com/janelia-flyem/dvid/scripts/conda-recipe/meta.yaml" }}
