@@ -13,10 +13,12 @@ jobs:
             - conda-tree-{{ arch }}-{{ checksum "/home/conda/gopath/src/github.com/janelia-flyem/dvid/scripts/conda-recipe/meta.yaml" }}
 
       - run:
+          name: Setup conda environment
           environment:
             GOPATH: /home/conda/gopath
             DVID_SRC: /home/conda/gopath/src/github.com/janelia-flyem/dvid
           command: |
+            ls -l /opt/docker/bin/
             source /opt/docker/bin/entrypoint_source
             conda config --add channels flyem-forge
             conda create -n dvid-test || true
@@ -34,6 +36,7 @@ jobs:
       - image: condaforge/linux-anvil
     steps:
       - run:
+          name: Build and test
           environment:
             GOPATH: /home/conda/gopath
             DVID_SRC: /home/conda/gopath/src/github.com/janelia-flyem/dvid
