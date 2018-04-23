@@ -4,6 +4,9 @@ jobs:
   checkout_and_install_deps:
     docker:
       - image: condaforge/linux-anvil
+        entrypoint: /opt/docker/bin/entrypoint
+        user: conda
+        
     steps:
       - checkout:
           path: /home/conda/gopath/src/github.com/janelia-flyem/dvid
@@ -41,6 +44,8 @@ jobs:
   build_and_test:
     docker:
       - image: condaforge/linux-anvil
+        entrypoint: /opt/docker/bin/entrypoint
+        user: conda
     steps:
       - run:
           name: Build and test
