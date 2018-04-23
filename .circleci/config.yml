@@ -10,16 +10,14 @@ jobs:
          
       - restore_cache:
           keys:
-            - conda-tree-{{ arch }}-{{ checksum "./scripts/conda-recipe/meta.yaml" }}
+            - conda-tree-{{ arch }}-{{ checksum "/home/conda/gopath/src/github.com/janelia-flyem/dvid/scripts/conda-recipe/meta.yaml" }}
 
       - run:
           environment:
             GOPATH: /home/conda/gopath
             DVID_SRC: /home/conda/gopath/src/github.com/janelia-flyem/dvid
           command: |
-            # Hack to put conda on the PATH
-            echo 'export PATH=/opt/conda/bin:$PATH' >> $BASH_ENV
-            source $BASH_ENV
+            source /opt/docker/bin/entrypoint_source
             conda config --add channels flyem-forge
             conda create -n dvid-test || true
             source activate dvid-test
@@ -27,7 +25,7 @@ jobs:
             ./scripts/install-developer-dependencies.sh
 
       - save_cache:
-          key: conda-tree-{{ arch }}-{{ checksum "./scripts/conda-recipe/meta.yaml" }}
+          key: conda-tree-{{ arch }}-{{ checksum "/home/conda/gopath/src/github.com/janelia-flyem/dvid/scripts/conda-recipe/meta.yaml" }}
           paths:
             - /opt/conda
 
@@ -40,9 +38,7 @@ jobs:
             GOPATH: /home/conda/gopath
             DVID_SRC: /home/conda/gopath/src/github.com/janelia-flyem/dvid
           command: |
-            # Hack to put conda on the PATH
-            echo 'export PATH=/opt/conda/bin:$PATH' >> $BASH_ENV
-            source $BASH_ENV
+            source /opt/docker/bin/entrypoint_source
             source activate dvid-test
             cd ${DVID_SRC}
             make dvid
