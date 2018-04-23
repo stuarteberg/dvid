@@ -10,7 +10,7 @@ jobs:
          
       - restore_cache:
           keys:
-            - conda-tree-{{ arch }}-{{ checksum "scripts/conda-recipe/meta.yaml" }}
+            - conda-tree-{{ arch }}-{{ checksum "./scripts/conda-recipe/meta.yaml" }}
 
       - run:
           environment:
@@ -24,7 +24,7 @@ jobs:
             ./scripts/install-developer-dependencies.sh
 
       - save_cache:
-          key: conda-tree-{{ arch }}-{{ checksum "scripts/conda-recipe/meta.yaml" }}
+          key: conda-tree-{{ arch }}-{{ checksum "./scripts/conda-recipe/meta.yaml" }}
           paths:
             - /opt/conda
 
@@ -41,10 +41,10 @@ jobs:
             cd ${DVID_SRC}
             make dvid
             make test
-
-workflows:
-  version: 2
-  setup_and_test:
-    jobs:
-      - checkout_and_install_deps
-      - build_and_test
+#
+#workflows:
+#  version: 2
+#  setup_and_test:
+#    jobs:
+#      - checkout_and_install_deps
+#      - build_and_test
